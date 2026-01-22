@@ -20,7 +20,7 @@
             --success: #10B981;
             --info: #3B82F6;
             --radius: 12px;
-            --shadow: 0 4px 6px -1px rgba( 0, 0, 0, 0.1), 0 2px 4px -1px rgba( 0, 0, 0, 0.06);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; -webkit-tap-highlight-color: transparent; }
@@ -44,17 +44,17 @@
         .welcome-hero h1 { font-size: 1.8rem; margin-bottom: 0.5rem; }
         .welcome-hero p { font-size: 1rem; opacity: 0.9; }
 
-        .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
-        .menu-card { background: var(--card-bg); padding: 2rem; border-radius: var(--radius); box-shadow: var(--shadow); text-align: center; cursor: pointer; transition: transform 0.3s, box-shadow 0.3s; border: 2px solid transparent; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 200px; }
-        .menu-card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px -3px rgba( 0, 0, 0, 0.1); border-color: var(--primary-color); }
-        .menu-card i { font-size: 3rem; color: var(--primary-color); margin-bottom: 1rem; }
-        .menu-card h2 { font-size: 1.2rem; color: var(--text-main); margin-bottom: 0.5rem; }
-        .menu-card p { font-size: 0.9rem; color: var(--text-light); }
+        .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 2rem; }
+        
+        .menu-card { background: var(--card-bg); padding: 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow); text-align: center; cursor: pointer; transition: transform 0.3s, box-shadow 0.3s; border: 2px solid transparent; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 150px; }
+        .menu-card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); border-color: var(--primary-color); }
+        .menu-card i { font-size: 2.5rem; color: var(--primary-color); margin-bottom: 0.5rem; }
+        .menu-card h2 { font-size: 1.1rem; color: var(--text-main); margin-bottom: 0.5rem; }
+        .menu-card p { font-size: 0.85rem; color: var(--text-light); }
 
         /* --- لوحة التحكم والبيانات --- */
         #dashboard-view { display: none; animation: fadeIn 0.5s ease-in; }
         
-        /* --- قسم تسجيل الدخول --- */
         #auth-section { display: none; max-width: 100%; margin: 1rem auto; background: var(--card-bg); padding: 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow); text-align: center; width: 100%; }
         .form-group { margin-bottom: 1rem; text-align: right; }
         .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.9rem; }
@@ -62,8 +62,8 @@
         .btn-submit { width: 100%; padding: 0.8rem; background-color: var(--primary-color); color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 1rem; }
 
         /* النماذج */
-        #teacher-panel, #reciters-panel { display: none; background: var(--card-bg); padding: 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 2rem; border-right: 5px solid var(--secondary-color); }
-        .input-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; } /* تصغير الحد الأدنى للعمود لاستيعاب العنصر الجديد */
+        #teacher-panel, #reciters-panel, #stages-panel { display: none; background: var(--card-bg); padding: 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 2rem; border-right: 5px solid var(--secondary-color); }
+        .input-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
 
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
         .stat-card { background: var(--card-bg); padding: 1.2rem; border-radius: var(--radius); box-shadow: var(--shadow); text-align: center; }
@@ -74,28 +74,11 @@
         table { width: 100%; border-collapse: collapse; min-width: 600px; }
         th, td { padding: 0.8rem; text-align: right; border-bottom: 1px solid #E5E7EB; vertical-align: middle; white-space: nowrap; }
         
-        /* زر حذف الطالب */
         .btn-delete { background-color: #FEE2E2; color: #991B1B; border: none; padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem; transition: all 0.3s; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; }
         .btn-delete:hover { background-color: #EF4444; color: white; }
 
-        /* زر مسح الكل للصفحة */
-        .btn-delete-all { 
-            background-color: #FEF2F2; color: #DC2626; border: 1px solid #FECACA; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 600; transition: all 0.3s; display: none; margin-left: auto; 
-            display: flex; align-items: center; gap: 0.5rem;
-        }
+        .btn-delete-all { background-color: #FEF2F2; color: #DC2626; border: 1px solid #FECACA; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 600; transition: all 0.3s; display: none; margin-right: auto; display: flex; align-items: center; gap: 0.5rem; }
         .btn-delete-all:hover { background-color: #DC2626; color: white; border-color: #DC2626; }
-
-        /* شارة نوع المتابعة */
-        .freq-badge {
-            display: inline-block;
-            font-size: 0.7rem;
-            background-color: #F3F4F6;
-            color: #6B7280;
-            padding: 2px 6px;
-            border-radius: 4px;
-            margin-right: 8px;
-            border: 1px solid #E5E7EB;
-        }
 
         .rating-wrapper { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
         
@@ -109,8 +92,11 @@
         .badge-excellent { background-color: #D1FAE5; color: #065F46; }
         .badge-good { background-color: #DBEAFE; color: #1E40AF; }
         .badge-needs-improvement { background-color: #FEE2E2; color: #991B1B; }
-        
+        .badge-stage { background-color: #E0F2FE; color: #1E3A8A; } 
+
         .empty-state { text-align: center; padding: 3rem; color: var(--text-light); }
+        
+        .frequency-tag { font-size: 0.75rem; color: var(--text-light); background-color: #F3F4F6; padding: 2px 6px; border-radius: 4px; margin-right: 5px; }
 
         #toast-container { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 1000; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 400px; }
         .toast { padding: 0.8rem; border-radius: 8px; color: white; box-shadow: 0 4px 12px rgba(0,0,0,0.15); animation: slideIn 0.3s ease-out; text-align: center; font-size: 0.9rem; }
@@ -123,12 +109,63 @@
         @media (max-width: 768px) {
             .logo { font-size: 1rem; }
             .stat-value { font-size: 1.8rem; }
-            .input-row { grid-template-columns: 1fr; gap: 0.8rem; }
+            .input-row { grid-template-columns: 1fr; gap: 0.5rem; }
             .rating-wrapper { flex-direction: row; justify-content: space-between; width: 100%; }
             .btn-like { flex-grow: 1; justify-content: center; padding: 0.4rem; }
             .btn-home { display: block; }
-            .btn-delete-all span { display: none; } /* إخفاء النص في الموبايل للتنظيم */
-            .freq-badge { margin-right: 0; margin-bottom: 4px; display: block; width: fit-content; } /* جعل الشارة تحت الاسم في الموبايل */
+            .btn-delete-all span { display: none; }
+
+            /* --- تعديل البطاقات للهاتف (2 في الصف) --- */
+            .cards-grid {
+                grid-template-columns: 1fr 1fr; 
+                gap: 0.6rem; 
+                margin-top: 1rem;
+            }
+            .menu-card {
+                padding: 0.8rem 0.5rem; 
+                min-height: 120px; 
+            }
+            .menu-card i {
+                font-size: 1.6rem; 
+                margin-bottom: 0.4rem;
+            }
+            .menu-card h2 {
+                font-size: 0.85rem; 
+                margin-bottom: 0.2rem;
+            }
+            .menu-card p {
+                font-size: 0.7rem; 
+                line-height: 1.2;
+                display: -webkit-box;
+                -webkit-line-clamp: 2; 
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+            }
+
+            /* --- تعديل حجم النماذج لتصبح أصغر ومناسبة للموبايل --- */
+            #teacher-panel, #reciters-panel, #stages-panel {
+                padding: 1rem; /* تقليل الهوامش الداخلية */
+                margin-bottom: 1.5rem;
+            }
+            
+            .form-group {
+                margin-bottom: 0.6rem; /* تقريب الحقول من بعضها */
+            }
+
+            .form-group label {
+                font-size: 0.85rem; /* تصغير خط التسميات */
+                margin-bottom: 0.3rem;
+            }
+
+            .form-control {
+                padding: 0.6rem; /* تقليل المسافة داخل الحقول */
+                font-size: 0.95rem;
+            }
+
+            .btn-submit {
+                padding: 0.6rem; /* تصغير زر الحفظ */
+                font-size: 0.95rem;
+            }
         }
     </style>
 </head>
@@ -136,7 +173,7 @@
 
     <header>
         <div class="navbar">
-            <div class="logo"><i class="fas fa-quran"></i> <span>حلقة علي بن ابي طالب</span></div>
+            <div class="logo"><i class="fas fa-quran"></i> <span>حلقة : علي بن ابي طالب</span></div>
             <div class="nav-actions">
                 <button id="btn-home" class="nav-actions btn-home" onclick="navigateTo('home')">
                     <i class="fas fa-home"></i> الرئيسية
@@ -164,21 +201,27 @@
         <!-- 1. الصفحة الرئيسية -->
         <section id="home-view">
             <div class="welcome-hero">
-                <h1>مرحبا بك في : حلقة علي بن ابي طالب</h1>
-                <p>الشيخ : معاذ زهير المحمد</p>
+                <h1>مرحبا في موقع حلقة علي بن ابي طالب</h1>
+                <p>مدرس الحلقة : الشيخ معاد المحمد</p>
             </div>
 
             <div class="cards-grid">
                 <div class="menu-card" onclick="navigateTo('reciters')">
                     <i class="fas fa-book-open"></i>
-                    <h2>المختبرون في الأجزاء</h2>
-                    <p>سجل الطلاب الذين اختبروا في أجزاء من القرآن الكريم لهذا الشهر</p>
+                    <h2>المختبرون بالأجزاء</h2>
+                    <p>الأجزاء الشهرية والدرجات</p>
+                </div>
+
+                <div class="menu-card" onclick="navigateTo('stages')">
+                    <i class="fas fa-layer-group"></i>
+                    <h2>اختبار المراحل</h2>
+                    <p>المراحل (5، 10، 15 جزء)</p>
                 </div>
 
                 <div class="menu-card" onclick="navigateTo('dashboard')">
                     <i class="fas fa-clipboard-list"></i>
-                    <h2>التقرير/اليومي/الاسبوعي/الشهري.</h2>
-                    <p>الجدول اليومي الشامل للمتابعة</p>
+                    <h2>التقرير /اليومي/الاسبوعي/الشهري</h2>
+                    <p>المتابعة اليومية</p>
                 </div>
             </div>
         </section>
@@ -189,22 +232,35 @@
 
             <!-- نموذج المتابعة اليومية -->
             <section id="teacher-panel">
-                <h3 style="margin-bottom: 1rem; font-size: 1.1rem;">تسجيل متابعة يومية</h3>
+                <h3 style="margin-bottom: 1rem; font-size: 1.1rem;">تسجيل التقرير</h3>
                 <form id="entry-form" onsubmit="handleSubmit(event)">
                     <div class="input-row">
                         <div class="form-group"><label>اسم الطالب</label><input type="text" id="student-name" class="form-control" placeholder="اسم الطالب" required></div>
-                        <div class="form-group"><label>نوع المتابعة</label><select id="frequency" class="form-control"><option value="daily">يومياً</option><option value="weekly">أسبوعياً</option><option value="monthly">شهرياً</option></select></div>
+                        
+                        <!-- تم التعديل: دمج حقل المقدار ليكون نصياً وحذف القائمة المنسدلة للوحدة -->
                         <div class="form-group">
                             <label>المقدار</label>
-                            <div style="display:flex; gap:5px;">
-                                <input type="number" id="amount" class="form-control" min="1" placeholder="0" required>
-                                <select id="unit" class="form-control" style="width:100px;">
-                                    <option value="آية">آية</option>
-                                    <option value="صفحة">صفحة</option>
-                                </select>
-                            </div>
+                            <input type="text" id="amount" class="form-control" placeholder="اكتب المقدار هنا (نصف صفحة، 3 آيات...)" required>
                         </div>
+
+                        <!-- حقل الحضور (جديد) -->
+                        <div class="form-group">
+                            <label>الحالة</label>
+                            <select id="attendance" class="form-control">
+                                <option value="present" selected>حضور</option>
+                                <option value="absent">غياب</option>
+                            </select>
+                        </div>
+
                         <div class="form-group"><label>التقييم</label><select id="level" class="form-control" required><option value="excellent">ممتاز</option><option value="good">جيد</option><option value="needs-improvement">يحتاج تحسين</option></select></div>
+                        <div class="form-group">
+                            <label>التكرار</label>
+                            <select id="frequency" class="form-control">
+                                <option value="daily" selected>يومياً</option>
+                                <option value="weekly">أسبوعياً</option>
+                                <option value="monthly">شهرياً</option>
+                            </select>
+                        </div>
                     </div>
                     <div class="form-group" style="margin-top:10px;"><label>الملاحظة</label><input type="text" id="notes" class="form-control" placeholder="ملاحظات اختيارية..."></div>
                     <div style="text-align:left; margin-top: 1rem;"><button type="submit" class="btn-submit" style="width:auto; display:inline-flex; gap:5px; justify-content: center;"><i class="fas fa-cloud-upload-alt"></i> تحديث البيانات</button></div>
@@ -217,13 +273,37 @@
                 <form id="reciters-form" onsubmit="handleRecitersSubmit(event)">
                     <div class="input-row">
                         <div class="form-group"><label>اسم الطالب</label><input type="text" id="reciter-name" class="form-control" placeholder="اسم الطالب" required></div>
-                        <div class="form-group"><label>نوع المتابعة</label><select id="reciter-frequency" class="form-control"><option value="monthly">شهرياً</option><option value="weekly">أسبوعياً</option><option value="daily">يومياً</option></select></div>
                         <div class="form-group"><label>عدد الأجزاء</label><input type="number" id="reciter-amount" class="form-control" min="1" placeholder="عدد الأجزاء" required></div>
                         <div class="form-group"><label>الدرجة من 100%</label><input type="number" id="reciter-score" class="form-control" min="0" max="100" placeholder="100" required></div>
                         <div class="form-group"><label>التقييم</label><select id="reciter-level" class="form-control" required><option value="excellent">ممتاز</option><option value="good">جيد</option><option value="needs-improvement">يحتاج تحسين</option></select></div>
                     </div>
                     <div class="form-group" style="margin-top:10px;"><label>تاريخ الاختبار</label><input type="date" id="reciter-date" class="form-control" required></div>
                     <div style="text-align:left; margin-top: 1rem;"><button type="submit" class="btn-submit" style="width:auto; display:inline-flex; gap:5px; justify-content: center;"><i class="fas fa-save"></i> حفظ المختبر</button></div>
+                </form>
+            </section>
+
+            <!-- نموذج اختبار المراحل -->
+            <section id="stages-panel">
+                <h3 style="margin-bottom: 1rem; font-size: 1.1rem;">اختبار مراحل (5 / 10 / 15 جزء)</h3>
+                <form id="stages-form" onsubmit="handleStagesSubmit(event)">
+                    <div class="input-row">
+                        <div class="form-group"><label>اسم الطالب</label><input type="text" id="stages-name" class="form-control" placeholder="اسم الطالب" required></div>
+                        <div class="form-group"><label>المقدار</label>
+                            <input type="hidden" id="stages-amount" value="">
+                            
+                            <select id="stages-unit" class="form-control" style="width: 100%;" onchange="handleStagesUnitChange()" required>
+                                <option value="" disabled selected>اختر المرحلة/الجزء</option>
+                                <option value="5 أجزاء">5 أجزاء</option>
+                                <option value="10 أجزاء">10 أجزاء</option>
+                                <option value="15 أجزاء">15 أجزاء</option>
+                                <option disabled>--- أجزاء شهرية ---</option>
+                            </select>
+                        </div>
+                        <div class="form-group"><label>الدرجة من 100%</label><input type="number" id="stages-score" class="form-control" min="0" max="100" placeholder="100" required></div>
+                        <div class="form-group"><label>التقييم</label><select id="stages-level" class="form-control" required><option value="excellent">ممتاز</option><option value="good">جيد</option><option value="needs-improvement">يحتاج تحسين</option></select></div>
+                    </div>
+                    <div class="form-group" style="margin-top:10px;"><label>ملاحظات</label><input type="text" id="stages-notes" class="form-control" placeholder="ملاحظات..."></div>
+                    <div style="text-align:left; margin-top: 1rem;"><button type="submit" class="btn-submit" style="width:auto; display:inline-flex; gap:5px; justify-content: center;"><i class="fas fa-award"></i> حفظ المرحلة</button></div>
                 </form>
             </section>
 
@@ -239,7 +319,6 @@
                         <i class="fas fa-trash-alt"></i>
                         <span id="btn-clear-text">مسح جميع البيانات</span>
                     </button>
-                    
                     <h3 style="font-size: 1.1rem; margin-right: 10px;">السجل</h3>
                 </div>
                 <div class="table-container">
@@ -285,9 +364,34 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        let currentView = 'home'; // home, dashboard, reciters
+        let currentView = 'home'; 
         let cachedSnapshot = null; 
 
+        // --- توليد خيارات الأجزاء الشهرية ---
+        const partsSelect = document.getElementById('stages-unit');
+        for(let i=1; i<=30; i++) {
+            const option = document.createElement('option');
+            option.value = `الجزء ${i}`;
+            option.textContent = `الجزء ${i}`;
+            partsSelect.appendChild(option);
+        }
+
+        window.handleStagesUnitChange = function() {
+            const val = this.value;
+            const amountInput = document.getElementById('stages-amount');
+            if (!amountInput) return; 
+
+            if (val.includes('5 أجزاء')) amountInput.value = 5;
+            else if (val.includes('10 أجزاء')) amountInput.value = 10;
+            else if (val.includes('15 أجزاء')) amountInput.value = 15;
+            else if (val.includes('الجزء')) {
+                amountInput.value = 1;
+            } else {
+                amountInput.value = '';
+            }
+        }
+
+        // --- دالة التنقل ---
         window.navigateTo = (view) => {
             const homeView = document.getElementById('home-view');
             const dashboardView = document.getElementById('dashboard-view');
@@ -295,6 +399,7 @@
             const pageTitle = document.getElementById('page-title');
             const teacherPanel = document.getElementById('teacher-panel');
             const recitersPanel = document.getElementById('reciters-panel');
+            const stagesPanel = document.getElementById('stages-panel');
             const authSection = document.getElementById('auth-section');
             const clearAllBtn = document.getElementById('btn-clear-all');
             const clearAllText = document.getElementById('btn-clear-text');
@@ -308,6 +413,7 @@
                 homeBtn.style.display = 'none';
                 teacherPanel.style.display = 'none';
                 recitersPanel.style.display = 'none';
+                stagesPanel.style.display = 'none';
             } else if (view === 'reciters') {
                 homeView.style.display = 'none';
                 dashboardView.style.display = 'block';
@@ -316,11 +422,19 @@
                 clearAllText.textContent = 'مسح سجل المختبرين لهذا الشهر';
                 updateFormVisibility(auth.currentUser);
                 if (cachedSnapshot) renderTable(cachedSnapshot, 'reciters');
+            } else if (view === 'stages') {
+                homeView.style.display = 'none';
+                dashboardView.style.display = 'block';
+                homeBtn.style.display = 'block';
+                pageTitle.textContent = 'اختبار المراحل (5/10/15 جزء)';
+                clearAllText.textContent = 'مسح سجل المراحل';
+                updateFormVisibility(auth.currentUser);
+                if (cachedSnapshot) renderTable(cachedSnapshot, 'stages');
             } else if (view === 'dashboard') {
                 homeView.style.display = 'none';
                 dashboardView.style.display = 'block';
                 homeBtn.style.display = 'block';
-                pageTitle.textContent = 'منصة المتابعة اليومية (آية / صفحة)';
+                pageTitle.textContent = 'المتابعة اليومية';
                 clearAllText.textContent = 'مسح سجل المتابعة اليومية';
                 updateFormVisibility(auth.currentUser);
                 if (cachedSnapshot) renderTable(cachedSnapshot, 'dashboard');
@@ -361,14 +475,18 @@
         const updateFormVisibility = (user) => {
             const teacherPanel = document.getElementById('teacher-panel');
             const recitersPanel = document.getElementById('reciters-panel');
+            const stagesPanel = document.getElementById('stages-panel');
             const actionsHeader = document.getElementById('th-actions');
             
             teacherPanel.style.display = 'none';
             recitersPanel.style.display = 'none';
+            stagesPanel.style.display = 'none';
 
             if (user) {
                 if (currentView === 'reciters') {
                     recitersPanel.style.display = 'block';
+                } else if (currentView === 'stages') {
+                    stagesPanel.style.display = 'block';
                 } else if (currentView === 'dashboard') {
                     teacherPanel.style.display = 'block';
                 }
@@ -428,7 +546,6 @@
             const score = document.getElementById('reciter-score').value;
             const level = document.getElementById('reciter-level').value;
             const dateStr = document.getElementById('reciter-date').value;
-            const frequency = document.getElementById('reciter-frequency').value; // الجديد
             
             const btn = e.target.querySelector('button');
             const old = btn.innerHTML;
@@ -448,14 +565,50 @@
                     unit: 'جزء', 
                     score: parseInt(score), 
                     zxc: level, 
+                    frequency: 'monthly',
                     nmk: 'اختبار أجزاء',
                     uoi: ts,
-                    frequency: frequency, // الجديد
                     likes: 0 
                 });
                 showToast('تم حفظ المختبر', 'success');
                 document.getElementById('reciters-form').reset();
                 document.getElementById('reciter-date').valueAsDate = new Date();
+            } catch(err) { showToast('فشل الحفظ', 'error'); }
+            btn.innerHTML = old;
+        };
+
+        // --- دالة حفظ المراحل ---
+        window.handleStagesSubmit = async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('stages-name').value;
+            
+            const amountInput = document.getElementById('stages-amount');
+            const amount = amountInput ? amountInput.value : 1; 
+
+            const unit = document.getElementById('stages-unit').value;
+            const score = document.getElementById('stages-score').value;
+            const level = document.getElementById('stages-level').value;
+            const notes = document.getElementById('stages-notes').value;
+
+            const btn = e.target.querySelector('button');
+            const old = btn.innerHTML;
+            btn.innerHTML = '<span class="loader"></span> جاري الحفظ...';
+
+            try {
+                await addDoc(collection(db, "daily_records"), {
+                    qwe: name,
+                    asd: parseInt(amount),
+                    unit: unit,
+                    score: parseInt(score),
+                    zxc: level,
+                    nmk: notes,
+                    frequency: 'stages',
+                    uoi: serverTimestamp(),
+                    likes: 0 
+                });
+                showToast('تم حفظ المرحلة', 'success');
+                document.getElementById('stages-form').reset();
+                document.getElementById('stages-amount').value = '';
             } catch(err) { showToast('فشل الحفظ', 'error'); }
             btn.innerHTML = old;
         };
@@ -467,21 +620,30 @@
             const old = btn.innerHTML;
             btn.innerHTML = '<span class="loader"></span> جاري الحفظ...';
             try {
-                const selectedUnit = document.getElementById('unit').value; 
-                const frequency = document.getElementById('frequency').value; // الجديد
+                const frequency = document.getElementById('frequency').value; 
+                const attendance = document.getElementById('attendance').value; 
+
+                let amountVal = document.getElementById('amount').value;
+                
+                let asdVal = parseInt(amountVal);
+                if (isNaN(asdVal)) asdVal = 0; 
 
                 await addDoc(collection(db, "daily_records"), {
                     qwe: document.getElementById('student-name').value,
-                    asd: parseInt(document.getElementById('amount').value),
-                    unit: selectedUnit,
+                    asd: asdVal, 
+                    asdText: amountVal, 
+                    unit: "", 
                     zxc: document.getElementById('level').value,
+                    frequency: frequency, 
                     nmk: document.getElementById('notes').value,
+                    attendance: attendance,
                     uoi: serverTimestamp(),
-                    frequency: frequency, // الجديد
                     likes: 0 
                 });
                 showToast('تم الحفظ', 'success');
                 document.getElementById('entry-form').reset();
+                document.getElementById('frequency').value = 'daily';
+                document.getElementById('attendance').value = 'present';
             } catch(err) { showToast('فشل الحفظ', 'error'); }
             btn.innerHTML = old;
         };
@@ -506,8 +668,9 @@
             }
         };
 
+        // --- دالة مسح جميع بيانات الصفحة الحالية ---
         window.handleClearAll = async () => {
-            if (confirm('هل أنت متأكد من مسح جميع البيانات الظاهرة في هذه الصفحة؟ لا يمكن التراجع عن هذا الإجراء.')) {
+            if (confirm('هل أنت متأكد من مسح جميع البيانات الظاهرة في هذه الصفحة؟')) {
                 if (!cachedSnapshot) return;
 
                 const batch = writeBatch(db);
@@ -521,15 +684,17 @@
                     const docDate = d.uoi ? d.uoi.toDate() : null;
                     let isVisible = false;
 
-                    if (currentView === 'reciters') {
+                    if (currentView === 'stages') {
+                        if (d.frequency === 'stages') isVisible = true;
+                    } else if (currentView === 'reciters') {
                         if (d.unit === 'جزء') {
                             if (!docDate || (docDate.getMonth() === currentMonth && docDate.getFullYear() === currentYear)) {
                                 isVisible = true;
                             }
                         }
                     } else if (currentView === 'dashboard') {
-                        if (d.unit !== 'جزء') {
-                            isVisible = true;
+                        if (d.unit !== 'جزء' && d.frequency !== 'stages') { 
+                             isVisible = true;
                         }
                     }
 
@@ -552,14 +717,6 @@
                 }
             }
         };
-
-        // --- دالة مساعدة لترجمة القيمة ---
-        function getFrequencyLabel(val) {
-            if(val === 'daily') return 'يومياً';
-            if(val === 'weekly') return 'أسبوعياً';
-            if(val === 'monthly') return 'شهرياً';
-            return '';
-        }
 
         // --- دالة رسم الجدول ---
         function renderTable(snap, targetView) {
@@ -586,18 +743,39 @@
                     const docDate = d.uoi ? d.uoi.toDate() : null;
                     
                     let isVisible = false;
+                    let displayAmountText = "";
+                    
+                    if (d.asdText) {
+                        displayAmountText = d.asdText; 
+                    } else if (d.asd || d.unit) {
+                        displayAmountText = `${d.asd || ''} ${d.unit || ''}`.trim(); 
+                    } else {
+                        displayAmountText = d.unit || '';
+                    }
 
-                    if (targetView === 'reciters') {
+                    let statusBadge = '';
+                    if (d.attendance === 'absent') {
+                        statusBadge = `<span class="badge badge-needs-improvement" style="margin-right:5px;">غائب</span>`;
+                    } else if (d.attendance === 'present') {
+                        statusBadge = `<span class="badge badge-excellent" style="margin-right:5px;">حاضر</span>`;
+                    }
+
+                    let badgeClass = '';
+                    let badgeText = '';
+
+                    if (targetView === 'stages') {
+                        if (d.frequency === 'stages') {
+                            isVisible = true;
+                            displayAmountText = d.unit;
+                        }
+                    } else if (targetView === 'reciters') {
                         if (d.unit === 'جزء') {
-                            if (!docDate) { isVisible = true; }
-                            else {
-                                if (docDate.getMonth() === currentMonth && docDate.getFullYear() === currentYear) {
-                                    isVisible = true;
-                                }
+                            if (!docDate || (docDate.getMonth() === currentMonth && docDate.getFullYear() === currentYear)) {
+                                isVisible = true;
                             }
                         }
                     } else if (targetView === 'dashboard') {
-                        if (d.unit !== 'جزء') {
+                        if (d.unit !== 'جزء' && d.frequency !== 'stages') {
                             isVisible = true;
                         }
                     }
@@ -607,8 +785,8 @@
                         if(d.zxc==='excellent') e++; else if(d.zxc==='needs-improvement') n++;
                         
                         const t = docDate ? new Intl.DateTimeFormat('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' }).format(docDate) : '';
-                        const badgeClass = d.zxc==='excellent'?'badge-excellent':(d.zxc==='needs-improvement'?'badge-needs-improvement':'badge-good');
-                        const badgeText = d.zxc==='excellent'?'ممتاز':(d.zxc==='needs-improvement'?'تحسين':'جيد');
+                        badgeClass = d.zxc==='excellent'?'badge-excellent':(d.zxc==='needs-improvement'?'badge-needs-improvement':'badge-good');
+                        badgeText = d.zxc==='excellent'?'ممتاز':(d.zxc==='needs-improvement'?'تحسين':'جيد');
                         
                         const currentLikes = d.likes || 0;
                         const isLiked = likedIds.includes(docSnap.id);
@@ -624,21 +802,10 @@
                                 <i class="fas fa-trash"></i> حذف
                             </button>` : '';
 
-                        let amountText = `${d.asd} ${d.unit}`;
-                        if (targetView === 'reciters' && d.score !== undefined) {
-                            amountText += ` <span style="font-size:0.8rem; color:var(--secondary-color); font-weight:bold;">(${d.score}%)</span>`;
-                        }
-
-                        // إضافة شارة نوع المتابعة
-                        const freqBadge = d.frequency ? `<span class="freq-badge">${getFrequencyLabel(d.frequency)}</span>` : '';
-
                         body.innerHTML += `
                             <tr>
-                                <td style="font-weight:bold; font-size:0.9rem;">
-                                    ${freqBadge}
-                                    ${d.qwe}
-                                </td>
-                                <td style="font-size:0.9rem;">${amountText}</td>
+                                <td style="font-weight:bold; font-size:0.9rem;">${d.qwe} ${statusBadge}</td>
+                                <td style="font-size:0.9rem;">${displayAmountText}</td>
                                 <td>
                                     <div class="rating-wrapper">
                                         <span class="badge ${badgeClass}">${badgeText}</span>
@@ -646,7 +813,7 @@
                                     </div>
                                 </td>
                                 <td style="font-size:0.85rem; max-width:100px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${d.nmk||'-'}</td>
-                                <td style="font-size:0.8rem; color:#6B7280;">${t}</td>
+                                <td style="font-size: 0.8rem; color:#6B7280;">${t}</td>
                                 <td>${deleteActionHTML}</td>
                             </tr>`;
                     }
