@@ -54,8 +54,9 @@
         /* --- لوحة التحكم والبيانات --- */
         #dashboard-view { display: none; animation: fadeIn 0.5s ease-in; }
         
+        /* --- قسم تسجيل الدخول (منفصل عن الصفحات) --- */
         #auth-section { display: none; max-width: 100%; margin: 1rem auto; background: var(--card-bg); padding: 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow); text-align: center; width: 100%; }
-        .form-group { margin-bottom:1rem; text-align: right; }
+        .form-group { margin-bottom: 1rem; text-align: right; }
         .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.9rem; }
         .form-control { width: 100%; padding: 0.8rem; border: 1px solid #D1D5DB; border-radius: 8px; font-size: 1rem; }
         .btn-submit { width: 100%; padding: 0.8rem; background-color: var(--primary-color); color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 1rem; }
@@ -113,7 +114,7 @@
 
     <header>
         <div class="navbar">
-            <div class="logo"><i class="fas fa-quran"></i> <span>حلقة علي بن ابي طالب</span></div>
+            <div class="logo"><i class="fas fa-quran"></i> <span>منصة مُحفِّظي</span></div>
             <div class="nav-actions">
                 <button id="btn-home" class="nav-actions btn-home" onclick="navigateTo('home')">
                     <i class="fas fa-home"></i> الرئيسية
@@ -127,11 +128,22 @@
     </header>
 
     <main>
+        <!-- --- قسم تسجيل الدخول (نقله ليكون خارج الصفحات ليعمل من الرئيسية) --- -->
+        <section id="auth-section">
+            <h3>تسجيل دخول المعلم</h3>
+            <form id="login-form" onsubmit="handleLogin(event)">
+                <div class="form-group"><label>البريد الإلكتروني</label><input type="email" id="email" class="form-control" required></div>
+                <div class="form-group"><label>كلمة المرور</label><input type="password" id="password" class="form-control" required></div>
+                <button type="submit" class="btn-submit"><span id="login-btn-text">دخول</span><span id="login-loader" class="loader" style="display:none;"></span></button>
+                <button type="button" onclick="toggleAuthModal()" style="margin-top:1rem; border:none; background:none; text-decoration:underline; cursor:pointer; color: var(--text-light);">إلغاء</button>
+            </form>
+        </section>
+
         <!-- 1. الصفحة الرئيسية -->
         <section id="home-view">
             <div class="welcome-hero">
-                <h1>مرحبا بكم في حلقة علي بن ابي طالب</h1>
-                <p>الشيخ : معاذ زهير المحمد</p>
+                <h1>أهلاً بك في منصة مُحفِّظي</h1>
+                <p>المنصة الأولى لمتابعة حفظ ومراجعة القرآن الكريم</p>
             </div>
 
             <div class="cards-grid">
@@ -143,8 +155,8 @@
 
                 <div class="menu-card" onclick="navigateTo('dashboard')">
                     <i class="fas fa-clipboard-list"></i>
-                    <h2>التقرير اليومي</h2>
-                    <p>التقرير اليومي الشامل للمتابعة اليومية</p>
+                    <h2>منصة مُحفِّظي</h2>
+                    <p>الجدول اليومي الشامل للمتابعة اليومية (آية / صفحة)</p>
                 </div>
             </div>
         </section>
@@ -152,16 +164,6 @@
         <!-- 2. لوحة التحكم والبيانات -->
         <section id="dashboard-view">
             <h2 id="page-title" style="margin-bottom: 1.5rem; font-size: 1.2rem; border-bottom: 2px solid var(--primary-color); display: inline-block; padding-bottom: 5px;">منصة المتابعة اليومية</h2>
-
-            <section id="auth-section">
-                <h3>تسجيل دخول المعلم</h3>
-                <form id="login-form" onsubmit="handleLogin(event)">
-                    <div class="form-group"><label>البريد الإلكتروني</label><input type="email" id="email" class="form-control" required></div>
-                    <div class="form-group"><label>كلمة المرور</label><input type="password" id="password" class="form-control" required></div>
-                    <button type="submit" class="btn-submit"><span id="login-btn-text">دخول</span><span id="login-loader" class="loader" style="display:none;"></span></button>
-                    <button type="button" onclick="toggleAuthModal()" style="margin-top:1rem; border:none; background:none; text-decoration:underline; cursor:pointer; color: var(--text-light);">إلغاء</button>
-                </form>
-            </section>
 
             <!-- نموذج المتابعة اليومية -->
             <section id="teacher-panel">
@@ -188,7 +190,7 @@
 
             <!-- نموذج المختبرين في الأجزاء -->
             <section id="reciters-panel">
-                <h3 style="margin-bottom: 1rem; font-size: 1.1rem;">إضافة مختبر جديد</h3>
+                <h3 style="margin-bottom: 1rem; font-size: 1.1rem;">إضافة مختبر جديد (أجزاء)</h3>
                 <form id="reciters-form" onsubmit="handleRecitersSubmit(event)">
                     <div class="input-row">
                         <div class="form-group"><label>اسم الطالب</label><input type="text" id="reciter-name" class="form-control" placeholder="اسم الطالب" required></div>
@@ -256,7 +258,7 @@
         const db = getFirestore(app);
 
         let currentView = 'home'; // home, dashboard, reciters
-        let cachedSnapshot = null; // لتخزين البيانات وتحديث العرض فوراً
+        let cachedSnapshot = null; 
 
         // --- دالة التنقل المحسنة ---
         window.navigateTo = (view) => {
@@ -266,6 +268,10 @@
             const pageTitle = document.getElementById('page-title');
             const teacherPanel = document.getElementById('teacher-panel');
             const recitersPanel = document.getElementById('reciters-panel');
+            const authSection = document.getElementById('auth-section');
+
+            // إخفاء Auth Section إذا كان ظاهراً
+            authSection.style.display = 'none';
 
             currentView = view;
 
@@ -281,29 +287,52 @@
                 homeBtn.style.display = 'block';
                 pageTitle.textContent = 'المختبرون في الأجزاء لهذا الشهر';
                 updateFormVisibility(auth.currentUser);
-                // --- تحديث فوري للجدول عند التنقل ---
                 if (cachedSnapshot) renderTable(cachedSnapshot, 'reciters');
             } else if (view === 'dashboard') {
                 homeView.style.display = 'none';
                 dashboardView.style.display = 'block';
                 homeBtn.style.display = 'block';
-                pageTitle.textContent = 'التقرير اليومي';
+                pageTitle.textContent = 'منصة المتابعة اليومية (آية / صفحة)';
                 updateFormVisibility(auth.currentUser);
-                // --- تحديث فوري للجدول عند التنقل ---
                 if (cachedSnapshot) renderTable(cachedSnapshot, 'dashboard');
+            }
+        };
+
+        // --- دالة تبديل نموذج الدخول (إصلاح المشكلة) ---
+        window.toggleAuthModal = () => {
+            const authSection = document.getElementById('auth-section');
+            const homeView = document.getElementById('home-view');
+            const dashboardView = document.getElementById('dashboard-view');
+            
+            // التحقق من حالة الظهور
+            const isHidden = authSection.style.display === 'none' || authSection.style.display === '';
+
+            if (isHidden) {
+                // فتح نموذج الدخول
+                authSection.style.display = 'block';
+                // إخفاء الصفحات الأخرى لتجنب التداخل البصري
+                homeView.style.display = 'none';
+                dashboardView.style.display = 'none';
+            } else {
+                // إغلاق نموذج الدخول (الضغط على إلغاء)
+                authSection.style.display = 'none';
+                // العودة للصفحة المناسبة
+                if (auth.currentUser) {
+                    navigateTo('dashboard');
+                } else {
+                    navigateTo('home');
+                }
             }
         };
 
         const updateFormVisibility = (user) => {
             const teacherPanel = document.getElementById('teacher-panel');
             const recitersPanel = document.getElementById('reciters-panel');
-            const authSection = document.getElementById('auth-section');
             
             teacherPanel.style.display = 'none';
             recitersPanel.style.display = 'none';
 
             if (user) {
-                authSection.style.display = 'none';
                 if (currentView === 'reciters') {
                     recitersPanel.style.display = 'block';
                 } else if (currentView === 'dashboard') {
@@ -325,6 +354,10 @@
                 userDisplay.textContent = `مرحباً`;
                 actionsHeader.style.display = 'table-cell'; 
                 updateFormVisibility(user);
+                // إذا كان المستخدم مسجل دخول وهو على صفحة الدخول، وجهه للداشبورد
+                if(document.getElementById('auth-section').style.display === 'block'){
+                    navigateTo('dashboard');
+                }
             } else {
                 loginBtn.style.display = 'inline-block';
                 logoutBtn.style.display = 'none';
@@ -334,11 +367,6 @@
             }
         });
 
-        window.toggleAuthModal = () => {
-            const s = document.getElementById('auth-section');
-            s.style.display = s.style.display === 'block' ? 'none' : 'block';
-        };
-
         window.handleLogin = async (e) => {
             e.preventDefault();
             const l = document.getElementById('login-loader');
@@ -347,11 +375,17 @@
                 await signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('password').value);
                 showToast('تم تسجيل الدخول', 'success');
                 document.getElementById('login-form').reset();
+                // التوجيه للداشبورد بعد الدخول الناجح
+                navigateTo('dashboard');
             } catch(err) { showToast('خطأ: '+err.message, 'error'); }
             l.style.display = 'none';
         };
 
-        window.handleLogout = () => { signOut(auth); showToast('تم الخروج', 'info'); };
+        window.handleLogout = () => { 
+            signOut(auth); 
+            showToast('تم الخروج', 'info');
+            navigateTo('home'); // العودة للرئيسية بعد الخروج
+        };
 
         // --- دالة حفظ المختبرين ---
         window.handleRecitersSubmit = async (e) => {
@@ -434,7 +468,7 @@
             }
         };
 
-        // --- دالة رسم الجدول (منفصلة لسهولة التحديث) ---
+        // --- دالة رسم الجدول ---
         function renderTable(snap, targetView) {
             const body = document.getElementById('records-body');
             const empty = document.getElementById('empty-msg');
@@ -451,73 +485,71 @@
 
             let visibleCount = 0;
 
-            if(snap.empty) { empty.style.display='block'; table.style.display='none'; }
-            else {
-                snap.forEach(docSnap => {
-                    const d = docSnap.data();
-                    const docDate = d.uoi ? d.uoi.toDate() : null;
-                    
-                    let isVisible = false;
+            snap.forEach(docSnap => {
+                const d = docSnap.data();
+                const docDate = d.uoi ? d.uoi.toDate() : null;
+                
+                let isVisible = false;
 
-                    // منطق الفصل الصارم والمباشر
-                    if (targetView === 'reciters') {
-                        // صفحة المختبرين: يظهر فقط إذا كان "جزء" و "الشهر الحالي"
-                        if (d.unit === 'جزء') {
-                            if (!docDate || (docDate.getMonth() === currentMonth && docDate.getFullYear() === currentYear)) {
+                // منطق الفصل الصارم
+                if (targetView === 'reciters') {
+                    if (d.unit === 'جزء') {
+                        if (!docDate) { isVisible = true; }
+                        else {
+                            if (docDate.getMonth() === currentMonth && docDate.getFullYear() === currentYear) {
                                 isVisible = true;
                             }
                         }
-                    } else if (targetView === 'dashboard') {
-                        // صفحة المنصة العامة: يظهر فقط إذا لم يكن "جزء" (أي آية أو صفحة)
-                        if (d.unit !== 'جزء') {
-                            isVisible = true;
-                        }
+                    }
+                } else if (targetView === 'dashboard') {
+                    if (d.unit !== 'جزء') {
+                        isVisible = true;
+                    }
+                }
+
+                if (isVisible) {
+                    visibleCount++;
+                    if(d.zxc==='excellent') e++; else if(d.zxc==='needs-improvement') n++;
+                    
+                    const t = docDate ? new Intl.DateTimeFormat('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' }).format(docDate) : '';
+                    const badgeClass = d.zxc==='excellent'?'badge-excellent':(d.zxc==='needs-improvement'?'badge-needs-improvement':'badge-good');
+                    const badgeText = d.zxc==='excellent'?'ممتاز':(d.zxc==='needs-improvement'?'تحسين':'جيد');
+                    
+                    const currentLikes = d.likes || 0;
+                    const isLiked = likedIds.includes(docSnap.id);
+
+                    const likeHTML = `
+                        <button class="btn-like" onclick="handleLike('${docSnap.id}')" ${isLiked ? 'disabled' : ''}>
+                            <i class="${isLiked ? 'fas' : 'far'} fa-heart"></i>
+                            <span class="like-count">${currentLikes}</span>
+                        </button>`;
+
+                    const deleteActionHTML = isAdmin ? `
+                        <button onclick="handleDelete('${docSnap.id}')" class="btn-delete">
+                            <i class="fas fa-trash"></i> حذف
+                        </button>` : '';
+
+                    let amountText = `${d.asd} ${d.unit}`;
+                    if (targetView === 'reciters' && d.score !== undefined) {
+                        amountText += ` <span style="font-size:0.8rem; color:var(--secondary-color); font-weight:bold;">(${d.score}%)</span>`;
                     }
 
-                    if (isVisible) {
-                        visibleCount++;
-                        if(d.zxc==='excellent') e++; else if(d.zxc==='needs-improvement') n++;
-                        
-                        const t = docDate ? new Intl.DateTimeFormat('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' }).format(docDate) : '';
-                        const badgeClass = d.zxc==='excellent'?'badge-excellent':(d.zxc==='needs-improvement'?'badge-needs-improvement':'badge-good');
-                        const badgeText = d.zxc==='excellent'?'ممتاز':(d.zxc==='needs-improvement'?'تحسين':'جيد');
-                        
-                        const currentLikes = d.likes || 0;
-                        const isLiked = likedIds.includes(docSnap.id);
-
-                        const likeHTML = `
-                            <button class="btn-like" onclick="handleLike('${docSnap.id}')" ${isLiked ? 'disabled' : ''}>
-                                <i class="${isLiked ? 'fas' : 'far'} fa-heart"></i>
-                                <span class="like-count">${currentLikes}</span>
-                            </button>`;
-
-                        const deleteActionHTML = isAdmin ? `
-                            <button onclick="handleDelete('${docSnap.id}')" class="btn-delete">
-                                <i class="fas fa-trash"></i> حذف
-                            </button>` : '';
-
-                        let amountText = `${d.asd} ${d.unit}`;
-                        if (targetView === 'reciters' && d.score !== undefined) {
-                            amountText += ` <span style="font-size:0.8rem; color:var(--secondary-color); font-weight:bold;">(${d.score}%)</span>`;
-                        }
-
-                        body.innerHTML += `
-                            <tr>
-                                <td style="font-weight:bold; font-size:0.9rem;">${d.qwe}</td>
-                                <td style="font-size:0.9rem;">${amountText}</td>
-                                <td>
-                                    <div class="rating-wrapper">
-                                        <span class="badge ${badgeClass}">${badgeText}</span>
-                                        ${likeHTML}
-                                    </div>
-                                </td>
-                                <td style="font-size:0.85rem; max-width:100px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${d.nmk||'-'}</td>
-                                <td style="font-size:0.8rem; color:#6B7280;">${t}</td>
-                                <td>${deleteActionHTML}</td>
-                            </tr>`;
-                    }
-                });
-            }
+                    body.innerHTML += `
+                        <tr>
+                            <td style="font-weight:bold; font-size:0.9rem;">${d.qwe}</td>
+                            <td style="font-size:0.9rem;">${amountText}</td>
+                            <td>
+                                <div class="rating-wrapper">
+                                    <span class="badge ${badgeClass}">${badgeText}</span>
+                                    ${likeHTML}
+                                </div>
+                            </td>
+                            <td style="font-size:0.85rem; max-width:100px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${d.nmk||'-'}</td>
+                            <td style="font-size:0.8rem; color:#6B7280;">${t}</td>
+                            <td>${deleteActionHTML}</td>
+                        </tr>`;
+                }
+            });
 
             if(visibleCount === 0) { empty.style.display='block'; table.style.display='none'; }
             else { empty.style.display='none'; table.style.display='table'; }
@@ -529,8 +561,8 @@
 
         // الاستماع لتغييرات قاعدة البيانات
         onSnapshot(query(collection(db, "daily_records"), orderBy("uoi", "desc")), (snap) => {
-            cachedSnapshot = snap; // حفظ البيانات
-            renderTable(snap, currentView); // تحديث العرض بناءً على الصفحة الحالية
+            cachedSnapshot = snap; 
+            renderTable(snap, currentView);
         });
 
         function showToast(msg, type) {
