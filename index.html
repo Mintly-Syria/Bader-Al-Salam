@@ -105,7 +105,7 @@
         table { width: 100%; border-collapse: collapse; min-width: 600px; }
         th, td { padding: 0.8rem; text-align: right; border-bottom: 1px solid #E5E7EB; vertical-align: middle; white-space: nowrap; }
         
-        /* تنسيق شارة المجموع الجديدة */
+        /* تنسيق شارة المجموع */
         .total-badge {
             background-color: #E0F2FE;
             color: #0369A1;
@@ -534,16 +534,16 @@
             
             <div class="dev-avatar"><i class="fas fa-laptop-code"></i></div>
             <h3 class="dev-name">Abdulrahman Al Dawood</h3>
-            <p class="dev-role">مطور ومصمم المنصة</p>
+            <p class="dev-role">مطور ومصمم الموقع</p>
 
             <div class="dev-details">
                 <div class="dev-item">
                     <i class="fas fa-envelope"></i>
-                    <span>abdulrahmanfzfz@gmail.com</span>
+                    <span>abdulragmanfzfz@gmail.com</span>
                 </div>
                 <div class="dev-item">
                     <i class="fas fa-map-marker-alt"></i>
-                    <span>ادلب سوريا</span>
+                    <span>ادلب سوريا </span>
                 </div>
                 <div class="dev-item">
                     <i class="fas fa-code-branch"></i>
@@ -668,13 +668,14 @@
             document.getElementById('amount-total').value = total;
         }
 
-        // دالة وضع خط الفصل
+        // دالة وضع خط الفصل (تم التعديل لتضمين الـ Frequency)
         window.addSeparatorLine = async () => {
             if(!confirm('هل تريد وضع خط أحمر للفصل هنا؟ سيظهر الخط بين البيانات، وستظهر أي بيانات جديدة فوقه.')) return;
             
             try {
                 await addDoc(collection(db, "daily_records"), {
                     type: 'separator',
+                    frequency: selectedTrackingFreq, // إضافة النوع ليظهر فقط في نفس التتبع
                     uoi: serverTimestamp()
                 });
                 showToast('تم وضع خط الفصل بنجاح', 'success');
@@ -1155,7 +1156,7 @@
             }
         };
 
-        // دالة رسم الجدول (مع إضافة عرض المجموع)
+        // دالة رسم الجدول (مع التحقق من توافق الفاصل)
         function renderTable(snap, targetView) {
             const body = document.getElementById('records-body');
             const empty = document.getElementById('empty-msg');
@@ -1178,16 +1179,19 @@
                 snap.forEach(docSnap => {
                     const d = docSnap.data();
                     
+                    // التحقق من أن الفاصل يظهر فقط في نفس نوع المتابعة
                     if (d.type === 'separator') {
-                        body.innerHTML += `
-                            <tr class="separator-row">
-                                <td colspan="6">
-                                    <div class="red-separator-line">
-                                        <button class="separator-delete-btn" onclick="handleDelete('${docSnap.id}')" title="حذف الخط">x</button>
-                                    </div>
-                                </td>
-                            </tr>
-                        `;
+                        if (targetView === 'dashboard' && d.frequency === selectedTrackingFreq) {
+                             body.innerHTML += `
+                                <tr class="separator-row">
+                                    <td colspan="6">
+                                        <div class="red-separator-line">
+                                            <button class="separator-delete-btn" onclick="handleDelete('${docSnap.id}')" title="حذف الخط">x</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            `;
+                        }
                         return;
                     }
 
@@ -1195,15 +1199,11 @@
                     let isVisible = false;
                     let displayAmountText = "";
                     
-                    // التعديل الجديد: عرض النص + الرقم لليومي والأسبوعي
                     if ((d.frequency === 'daily' || d.frequency === 'weekly') && d.asdText) {
-                        // التحقق من وجود الرقم في d.asd
                         const totalNumber = d.asd !== undefined ? d.asd : 0;
-                        // إضافة الشارة مع الرقم
                         displayAmountText = `${d.asdText} <span class="total-badge">(${totalNumber})</span>`;
                     } 
                     else if (d.asdText) {
-                        // للمتابعة الشهرية (نص فقط) أو البيانات القديمة
                         displayAmountText = d.asdText; 
                     } else if (d.asd || d.unit) {
                         displayAmountText = `${d.asd || ''} ${d.unit || ''}`.trim(); 
