@@ -10,7 +10,7 @@
         :root {
             --primary-color: #0d8009; 
             --primary-dark: #000000;
-            --secondary-color: rgb(192, 173, 7);
+            --secondary-color: #c0ad07;
             --bg-color: #f3f6f5;
             --card-bg: #FFFFFF;
             --text-main: #1F2937;
@@ -19,7 +19,7 @@
             --success: #10B981;
             --info: #3B82F6;
             --radius: 15px;
-            --shadow: 0 5px 7px 3px #000000, 0 0px 0px 0px #0295a0;
+            --shadow: 0 5px 7px 3px #000000, 0px 0px 0px 0px #575b63;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; -webkit-tap-highlight-color: transparent; }
@@ -84,15 +84,15 @@
         #dashboard-view { display: none; animation: fadeIn 0.5s ease-in; }
         
         #auth-section { display: none; max-width: 100%; margin: 1rem auto; background: var(--card-bg); padding: 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow); text-align: center; width: 100%; }
-        .form-group { margin-bottom: 1rem; text-align: right; }
+        .form-group { margin-bottom:1rem; text-align: right; }
         .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.9rem; }
         .form-control { width: 100%; padding: 0.8rem; border: 1px solid #D1D5DB; border-radius: 8px; font-size: 1rem; }
         /* تنسيق خاص للحقول الصغيرة داخل المتابعة */
         .input-row .form-group { margin-bottom: 0; } 
-        .btn-submit { width: 100%; padding: 0.8rem; background-color: var(--primary-color); color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 1rem; }
+        .btn-submit { width: 100%; padding: 0.8rem; background-color: var(--primary-color); color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; font-size:1rem; }
 
         /* النماذج */
-        #teacher-panel, #reciters-panel, #stages-panel { display: none; background: var(--card-bg); padding: 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 2rem; border-right: 5px solid var(--secondary-color); }
+        #teacher-panel, #reciters-panel, #stages-panel { display: none; background: var(--card-bg); padding:1.5rem; border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 2rem; border-right:5px solid var(--secondary-color); }
         .input-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; }
 
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
@@ -137,14 +137,34 @@
             margin: 0;
             position: relative;
         }
+
+        /* تنسيق بطاقة اليوم في المنتصف */
+        .separator-label {
+            position: absolute;
+            top: 50%;
+            left: 95%;
+            transform: translate(-50%, -50%);
+            background-color: #ff0000;
+            padding: 2px 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: var(--text-main);
+            box-shadow: 0 5px 5px rgb(14, 110, 2);
+            white-space: nowrap;
+            z-index: 1;
+        }
+
         .separator-delete-btn {
             position: absolute;
             left: 50%;
             top: -12px;
             transform: translateX(-50%);
             background: white;
-            border: 1px solid #EF4444;
-            color: #EF4444;
+            border:4px solid #ff0000;
+            color: #ef4444;
+            box-shadow: 0 5px 5px rgb(14, 110, 2);
             width: 24px;
             height: 24px;
             border-radius: 50%;
@@ -179,7 +199,7 @@
         #toast-container { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 1000; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 400px; }
         .toast { padding: 0.8rem; border-radius: 8px; color: white; box-shadow: 0 4px 12px rgba(0,0,0,0.15); animation: slideIn 0.3s ease-out; text-align: center; font-size: 0.9rem; }
         @keyframes slideIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity:1; } }
 
         .loader { border: 3px solid #f3f3f3; border-top: 3px solid var(--primary-color); border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; display: inline-block; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
@@ -242,14 +262,14 @@
         }
 
         .dev-name { font-size: 1.4rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.2rem; }
-        .dev-role { font-size: 0.95rem; color: var(--text-light); margin-bottom: 1.5rem; }
+        .dev-role { font-size: 0.95rem; color: var(--text-light); margin-bottom:1.5rem; }
 
         .dev-details {
             text-align: right;
             background: #f9fafb;
             padding: 1rem;
             border-radius: 8px;
-            margin-bottom: 1.5rem;
+            margin-bottom:1.5rem;
         }
         
         .dev-item {
@@ -297,7 +317,7 @@
 
     <header>
         <div class="navbar">
-            <div class="logo"><i class="fas fa-quran"></i> <span>حلقة علي بن ابي طالب</span></div>
+            <div class="logo"><i class="fas fa-quran"></i> <span>حلقة علي بن أبي طالب</span></div>
             <div class="nav-actions">
                 <button id="btn-home" class="nav-actions btn-home" onclick="navigateTo('home')">
                     <i class="fas fa-home"></i> <span>الرئيسية</span>
@@ -330,7 +350,7 @@
         <!-- 1. الصفحة الرئيسية -->
         <section id="home-view">
             <div class="welcome-hero">
-                <h1>مرحبا بكم في حلقة علي بن ابي طالب</h1>
+                <h1>مرحباً بكم في حلقة علي بن أبي طالب</h1>
                 <p>معاذ المحمد</p>
             </div>
 
@@ -667,14 +687,27 @@
             document.getElementById('amount-total').value = total;
         }
 
-        // دالة وضع خط الفصل (تم التعديل لتضمين الـ Frequency)
+        // دالة وضع خط الفصل
         window.addSeparatorLine = async () => {
             if(!confirm('هل تريد وضع خط أحمر للفصل هنا؟ سيظهر الخط بين البيانات، وستظهر أي بيانات جديدة فوقه.')) return;
             
             try {
+                const now = new Date();
+                const dayName = now.toLocaleDateString('ar-SY', { weekday: 'long' });
+
+                // تحديد نوع التتبع أو الصفحة للفاصل
+                let separatorFreq = selectedTrackingFreq; 
+                
+                if (currentView === 'reciters') {
+                    separatorFreq = 'reciters';
+                } else if (currentView === 'stages') {
+                    separatorFreq = 'stages';
+                }
+
                 await addDoc(collection(db, "daily_records"), {
                     type: 'separator',
-                    frequency: selectedTrackingFreq, // إضافة النوع ليظهر فقط في نفس التتبع
+                    frequency: separatorFreq, 
+                    dayLabel: dayName, 
                     uoi: serverTimestamp()
                 });
                 showToast('تم وضع خط الفصل بنجاح', 'success');
@@ -840,7 +873,7 @@
             navigateTo('home');
         };
 
-        // دالة حفظ المختبرين
+        // دالة حفظ المختبرين (تم التعديل لحل مشكلة الترتيب الزمني)
         window.handleRecitersSubmit = async (e) => {
             e.preventDefault();
             const name = document.getElementById('reciter-name').value;
@@ -855,10 +888,27 @@
 
             try {
                 let ts = serverTimestamp();
+                
                 if (dateStr) {
-                    const dateObj = new Date(dateStr);
-                    dateObj.setHours(12, 0, 0, 0);
-                    ts = Timestamp.fromDate(dateObj);
+                    const inputDate = new Date(dateStr);
+                    const today = new Date();
+                    
+                    // التحقق هل التاريخ المدخل هو اليوم؟
+                    // نقارن السنة، الشهر، اليوم
+                    const isToday = inputDate.getDate() === today.getDate() &&
+                                    inputDate.getMonth() === today.getMonth() &&
+                                    inputDate.getFullYear() === today.getFullYear();
+
+                    if (isToday) {
+                        // إذا كان اليوم، نستخدم الوقت الفعلي الحالي (serverTimestamp)
+                        // لضمان الترتيب الصحيح مع خطوط الفصل المضافة الآن
+                        ts = serverTimestamp();
+                    } else {
+                        // إذا كان تاريخاً آخر (ماضي أو مستقبل)، نثبت الساعة على 12:00 ظهراً
+                        // لترتيبها حسب الأيام فقط
+                        inputDate.setHours(12, 0, 0, 0);
+                        ts = Timestamp.fromDate(inputDate);
+                    }
                 }
 
                 const dataPayload = {
@@ -896,7 +946,7 @@
 
             try {
                 const amountInput = document.getElementById('stages-amount');
-                const amount = amountInput ? amountInput.value : 1; 
+                const amount = amountInput ? amountInput.value :1; 
 
                 const dataPayload = {
                     qwe: document.getElementById('stages-name').value,
@@ -1018,6 +1068,7 @@
                 document.getElementById('reciter-level').value = data.zxc;
                 if (data.uoi) {
                     const dateObj = data.uoi.toDate();
+                    // عند التعديل، نعرض التاريخ فقط
                     document.getElementById('reciter-date').valueAsDate = dateObj;
                 }
                 toggleEditButton('#btn-submit-reciter', 'تحديث المختبر', '#btn-cancel-reciter');
@@ -1155,7 +1206,7 @@
             }
         };
 
-        // دالة رسم الجدول (مع التحقق من توافق الفاصل)
+        // دالة رسم الجدول
         function renderTable(snap, targetView) {
             const body = document.getElementById('records-body');
             const empty = document.getElementById('empty-msg');
@@ -1178,13 +1229,25 @@
                 snap.forEach(docSnap => {
                     const d = docSnap.data();
                     
-                    // التحقق من أن الفاصل يظهر فقط في نفس نوع المتابعة
                     if (d.type === 'separator') {
+                        let shouldRender = false;
+
                         if (targetView === 'dashboard' && d.frequency === selectedTrackingFreq) {
+                            shouldRender = true;
+                        } 
+                        else if (targetView === 'reciters' && d.frequency === 'reciters') {
+                            shouldRender = true;
+                        }
+                        else if (targetView === 'stages' && d.frequency === 'stages') {
+                            shouldRender = true;
+                        }
+
+                        if (shouldRender) {
                              body.innerHTML += `
                                 <tr class="separator-row">
                                     <td colspan="6">
                                         <div class="red-separator-line">
+                                            ${d.dayLabel ? `<div class="separator-label">${d.dayLabel}</div>` : ''}
                                             <button class="separator-delete-btn" onclick="handleDelete('${docSnap.id}')" title="حذف الخط">x</button>
                                         </div>
                                     </td>
@@ -1312,7 +1375,3 @@
     </script>
 </body>
 </html>
-
-
-
-
