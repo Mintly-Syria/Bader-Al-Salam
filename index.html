@@ -872,12 +872,12 @@
             navigateTo('dashboard', title);
         }
 
-        // دالة حساب المجموع (تم التعديل لعدم الحساب إذا كانت فارغة)
+        // دالة حساب المجموع (تظهر طبيعية 168-168 = 1)
+        // التعديل: تطبيق القاعدة للصفحات 168 إلى 200
         window.calculateTotal = () => {
             const fromVal = document.getElementById('amount-from').value;
             const toVal = document.getElementById('amount-to').value;
 
-            // إذا كان الحقل فارغاً اجعل المجموع 0
             if (fromVal === "" || toVal === "") {
                 document.getElementById('amount-total').value = 0;
                 return;
@@ -887,7 +887,12 @@
             const to = parseFloat(toVal) || 0;
             let total = 0;
 
-            if (to >= from) { 
+            // التحقق مما إذا كانت الصفحة داخل النطاق 168 - 200
+            const isSpecialRange = (from >= 168 && from <= 200) && (to >= 168 && to <= 200);
+
+            if (isSpecialRange && from === to) {
+                total = 1; // المجموع يظهر 1 في الشاشة للصفحات 168-200
+            } else if (to >= from) { 
                 total = (to - from) + 1; 
             }
             
@@ -902,7 +907,6 @@
                 const now = new Date();
                 const dayName = now.toLocaleDateString('ar-SY', { weekday: 'long' });
 
-                // تحديد نوع التتبع أو الصفحة للفاصل
                 let separatorFreq = selectedTrackingFreq; 
                 
                 if (currentView === 'reciters') {
@@ -911,7 +915,6 @@
                     separatorFreq = 'stages';
                 }
 
-                // 1. إضافة خط الفاصل
                 await addDoc(collection(db, "daily_records"), {
                     type: 'separator',
                     frequency: separatorFreq, 
@@ -919,24 +922,20 @@
                     uoi: serverTimestamp()
                 });
 
-                // 2. إضافة سجل طالب فارغ تماماً
                 let studentData = {
-                    qwe: "", // الاسم فارغ
-                    zxc: "", // التقييم فارغ لفرض الاختيار
+                    qwe: "", 
+                    zxc: "", 
                     uoi: serverTimestamp() 
                 };
 
-                // تعبئة الحقول فارغة حسب نوع المتابعة الحالي
                 if (separatorFreq === 'reciters') {
-                    // بيانات المختبرين (فارغة)
-                    studentData.asd = ""; // المقدار فارغ
+                    studentData.asd = ""; 
                     studentData.unit = "جزء";
-                    studentData.score = 0; // الدرجة 0
-                    studentData.nmk = ""; // الملاحظات فارغة
+                    studentData.score = 0; 
+                    studentData.nmk = ""; 
                     studentData.frequency = 'monthly'; 
                 } 
                 else if (separatorFreq === 'stages') {
-                    // بيانات المراحل (فارغة)
                     studentData.asd = 0;
                     studentData.unit = "السدس الأول";
                     studentData.score = 0;
@@ -944,16 +943,14 @@
                     studentData.frequency = 'stages';
                 } 
                 else {
-                    // بيانات المتابعة (فارغة)
                     studentData.frequency = separatorFreq;
                     studentData.attr = "present";
                     studentData.nmk = "";
 
                     if (separatorFreq === 'monthly') {
-                         studentData.asdText = ""; // نص الشهر فارغ
+                         studentData.asdText = ""; 
                          studentData.asd = 0;
                     } else {
-                        // يومي أو أسبوعي (صفحات فارغة)
                         studentData.page_from = 0;
                         studentData.page_to = 0;
                         studentData.asd = 0;
@@ -984,12 +981,9 @@
             const separatorBtn = document.getElementById('btn-separator');
             const clearAllText = document.getElementById('btn-clear-text');
             
-            // --- الإصلاح 1: إلغاء التعديل فقط إذا كنا ننتقل لقسم مختلف تماماً ---
-            // هذا يضمن أن زر التعديل لا يفقد الـ ID عند إعادة رسم نفس الصفحة
             if (view !== currentView) {
                 handleCancelEdit(true);
             }
-            // إلغاء وضع التصوير دائماً عند التنقل
             if(isScreenshotMode) toggleScreenshotMode();
 
             authSection.style.display = 'none';
@@ -1010,7 +1004,7 @@
                 pageTitle.textContent = customTitle || 'المختبرون في الأجزاء لهذا الشهر';
                 clearAllText.textContent = 'مسح الكل';
                 updateFormVisibility(auth.currentUser);
-                updateTableColumns('reciters'); // تحديث الأعمدة
+                updateTableColumns('reciters'); 
                 if (cachedSnapshot) renderTable(cachedSnapshot, 'reciters');
             } else if (view === 'stages') {
                 homeView.style.display = 'none';
@@ -1019,7 +1013,7 @@
                 pageTitle.textContent = customTitle || 'اختبار المراحل';
                 clearAllText.textContent = 'مسح الكل';
                 updateFormVisibility(auth.currentUser);
-                updateTableColumns('stages'); // تحديث الأعمدة
+                updateTableColumns('stages'); 
                 if (cachedSnapshot) renderTable(cachedSnapshot, 'stages');
             } else if (view === 'dashboard') {
                 homeView.style.display = 'none';
@@ -1028,22 +1022,19 @@
                 pageTitle.textContent = customTitle || 'السجلات';
                 clearAllText.textContent = 'مسح الكل';
                 updateFormVisibility(auth.currentUser);
-                updateTableColumns('dashboard'); // تحديث الأعمدة
+                updateTableColumns('dashboard'); 
                 if (cachedSnapshot) renderTable(cachedSnapshot, 'dashboard');
             }
             updateClearButtonVisibility();
         };
 
-        // دالة إدارة ظهور الأعمدة (معالجة التشوش)
         function updateTableColumns(view) {
             const scoreEls = document.querySelectorAll('.col-score');
             const actionsEls = document.querySelectorAll('.col-actions');
 
-            // إعادة تعيين الكل للإخفاء أولاً
             scoreEls.forEach(el => el.style.display = 'none');
             actionsEls.forEach(el => el.style.display = 'none');
 
-            // إظهار حسب الحاجة
             if (view === 'reciters' || view === 'stages') {
                 scoreEls.forEach(el => el.style.display = 'table-cell');
             }
@@ -1053,7 +1044,6 @@
             }
         }
 
-        // دالة تبديل نموذج الدخول
         window.toggleAuthModal = () => {
             const authSection = document.getElementById('auth-section');
             const homeView = document.getElementById('home-view');
@@ -1075,23 +1065,21 @@
             }
         };
 
-        // تحديث ظهور الأزرار
         const updateClearButtonVisibility = () => {
             const isAdmin = auth.currentUser !== null;
             const clearBtn = document.getElementById('btn-clear-all');
             const sepBtn = document.getElementById('btn-separator');
-            const shotBtn = document.getElementById('btn-screenshot'); // زر الصورة
+            const shotBtn = document.getElementById('btn-screenshot'); 
 
             if(isAdmin) {
                 clearBtn.style.display = 'flex';
                 sepBtn.style.display = 'flex';
-                shotBtn.style.display = 'flex'; // إظهار زر الصورة
+                shotBtn.style.display = 'flex'; 
             } else {
                 clearBtn.style.display = 'none';
                 sepBtn.style.display = 'none';
-                shotBtn.style.display = 'none'; // إخفاء زر الصورة
+                shotBtn.style.display = 'none'; 
             }
-            // تحديث عمود الإجراءات عند تغيير حالة الدخول
             updateTableColumns(currentView);
         }
 
@@ -1157,11 +1145,8 @@
             navigateTo('home');
         };
 
-        // دالة حفظ المختبرين (مع التحقق من التقييم)
         window.handleRecitersSubmit = async (e) => {
             e.preventDefault();
-            
-            // --- الإصلاح 3: التحقق من التقييم ---
             const level = document.getElementById('reciter-level').value;
             if(!level) {
                 document.getElementById('reciter-level').focus();
@@ -1217,18 +1202,14 @@
                     showToast('تم حفظ المختبر', 'success');
                     document.getElementById('reciters-form').reset();
                     document.getElementById('reciter-date').valueAsDate = new Date();
-                    // إعادة تعيين القيم الافتراضية للقائمة المنسدلة
                     document.getElementById('reciter-level').value = "";
                 }
             } catch(err) { showToast('فشل الحفظ', 'error'); }
             btn.innerHTML = old;
         };
 
-        // دالة حفظ المراحل (مع التحقق من التقييم)
         window.handleStagesSubmit = async (e) => {
             e.preventDefault();
-            
-            // --- الإصلاح 3: التحقق من التقييم ---
             const level = document.getElementById('stages-level').value;
             if(!level) {
                 document.getElementById('stages-level').focus();
@@ -1270,11 +1251,10 @@
             btn.innerHTML = old;
         };
 
-        // دالة حفظ المتابعة (مع التحقق من التقييم)
+        // دالة حفظ المتابعة (الحفظ في قاعدة البيانات يكون 168-168)
         window.handleSubmit = async (e) => {
             e.preventDefault();
             
-            // --- الإصلاح 3: التحقق من التقييم ---
             const level = document.getElementById('level').value;
             if(!level) {
                 document.getElementById('level').focus();
@@ -1300,58 +1280,60 @@
                     const to = document.getElementById('amount-to').value;
                     const total = document.getElementById('amount-total').value;
                     
-                    asdVal = parseInt(total) || 0;
+                    // ملاحظة: نقوم بحفظ القيم كما هي من المدخلات
+                    // التعديل سيحدث فقط وقت التصوير، وليس وقت الحفظ
                     
-                    // التحقق من وجود قيم قبل إنشاء النص
                     if (from && to) {
+                        asdVal = parseInt(total) || 0;
                         asdText = `من ${from} إلى ${to}`;
                     } else {
-                        asdText = ""; // فارغ إذا لم يدخل المعلم الصفحات
+                        asdVal = parseInt(total) || 0;
+                        asdText = ""; 
                     }
-                }
 
-                let dataPayload = {
-                    qwe: document.getElementById('student-name').value,
-                    asd: asdVal, 
-                    asdText: asdText, 
-                    unit: "", 
-                    zxc: level, // التقييم
-                    frequency: frequency, 
-                    nmk: document.getElementById('notes').value
-                };
+                    let dataPayload = {
+                        qwe: document.getElementById('student-name').value,
+                        asd: asdVal, 
+                        asdText: asdText, 
+                        unit: "", 
+                        zxc: level, 
+                        frequency: frequency, 
+                        nmk: document.getElementById('notes').value
+                    };
 
-                if(frequency !== 'monthly') { 
-                     // حفظ الصفحات فقط إذا تم إدخالها
-                     const fromVal = document.getElementById('amount-from').value;
-                     const toVal = document.getElementById('amount-to').value;
-                     if(fromVal && toVal) {
-                        dataPayload.page_from = parseInt(fromVal);
-                        dataPayload.page_to = parseInt(toVal);
-                     }
-                }
+                    if(frequency !== 'monthly') { 
+                         const fromVal = document.getElementById('amount-from').value;
+                         const toVal = document.getElementById('amount-to').value;
+                         
+                         if(fromVal && toVal) {
+                            dataPayload.page_from = parseInt(fromVal);
+                            dataPayload.page_to = parseInt(toVal);
+                         }
+                    }
 
-                if (frequency !== 'monthly') {
-                    dataPayload.attr = document.getElementById('attendance').value;
-                }
+                    if (frequency !== 'monthly') {
+                        dataPayload.attr = document.getElementById('attendance').value;
+                    }
 
-                if (editDocId) {
-                    await updateDoc(doc(db, "daily_records", editDocId), dataPayload);
-                    showToast('تم تحديث البيانات', 'success');
-                    handleCancelEdit();
-                } else {
-                    dataPayload.uoi = serverTimestamp();
-                    await addDoc(collection(db, "daily_records"), dataPayload);
-                    showToast('تم الحفظ', 'success');
-                    if (frequency === 'monthly') {
-                        document.getElementById('monthly-text').value = "";
-                        document.getElementById('student-name').value = "";
-                        document.getElementById('notes').value = "";
-                        document.getElementById('level').value = ""; // تصفير التقييم
+                    if (editDocId) {
+                        await updateDoc(doc(db, "daily_records", editDocId), dataPayload);
+                        showToast('تم تحديث البيانات', 'success');
+                        handleCancelEdit();
                     } else {
-                        document.getElementById('entry-form').reset();
-                        document.getElementById('amount-total').value = "";
-                        document.getElementById('attendance').value = 'present';
-                        document.getElementById('level').value = ""; // تصفير التقييم
+                        dataPayload.uoi = serverTimestamp();
+                        await addDoc(collection(db, "daily_records"), dataPayload);
+                        showToast('تم الحفظ', 'success');
+                        if (frequency === 'monthly') {
+                            document.getElementById('monthly-text').value = "";
+                            document.getElementById('student-name').value = "";
+                            document.getElementById('notes').value = "";
+                            document.getElementById('level').value = ""; 
+                        } else {
+                            document.getElementById('entry-form').reset();
+                            document.getElementById('amount-total').value = "";
+                            document.getElementById('attendance').value = 'present';
+                            document.getElementById('level').value = ""; 
+                        }
                     }
                 }
             } catch(err) { showToast('فشل الحفظ', 'error'); }
@@ -1402,7 +1384,6 @@
                     if (data.page_from !== undefined && data.page_to !== undefined) {
                         document.getElementById('amount-from').value = data.page_from;
                         document.getElementById('amount-to').value = data.page_to;
-                        // تم التعديل هنا لحساب المجموع بشكل صحيح عند التعديل
                         document.getElementById('amount-total').value = (data.page_to - data.page_from) + 1;
                     } else if (data.asd) {
                         document.getElementById('amount-total').value = data.asd;
@@ -1412,11 +1393,9 @@
                 toggleEditButton('#btn-submit-entry', 'حفظ التعديلات', '#btn-cancel-entry');
             }
 
-            // الصعود لأعلى الصفحة
             window.scrollTo({ top: 0, behavior: 'smooth' });
         };
 
-        // دالة تبديل أزرار التعديل والإلغاء
         function toggleEditButton(submitBtnId, text, cancelBtnId) {
             const btn = document.querySelector(submitBtnId);
             if(btn) btn.innerHTML = `<i class="fas fa-edit"></i> ${text}`;
@@ -1427,30 +1406,24 @@
             if(cancelBtn) cancelBtn.style.display = 'inline-flex';
         }
 
-        // دالة إلغاء التعديل
         window.handleCancelEdit = (silent = false) => {
             editDocId = null;
             
-            // إعادة تعيين جميع النماذج
             document.getElementById('entry-form').reset();
             document.getElementById('reciters-form').reset();
             document.getElementById('stages-form').reset();
             
-            // إعادة تعيين الحقول المحسوبة أو الخاصة
             document.getElementById('amount-total').value = "";
             document.getElementById('monthly-text').value = "";
             document.getElementById('stages-amount').value = '1';
             document.getElementById('reciter-date').valueAsDate = new Date();
 
-            // إخفاء جميع أزرار الإلغاء
             document.querySelectorAll('.btn-cancel-edit').forEach(btn => btn.style.display = 'none');
 
-            // إعادة نصوص الأزرار للحالة الافتراضية
             document.getElementById('btn-submit-entry').innerHTML = '<i class="fas fa-cloud-upload-alt"></i> تحديث البيانات';
             document.getElementById('btn-submit-reciter').innerHTML = '<i class="fas fa-save"></i> حفظ المختبر';
             document.getElementById('btn-submit-stage').innerHTML = '<i class="fas fa-award"></i> حفظ المرحلة';
             
-            // إذا كنا في لوحة التحكم، نعيد ضبط الحالة حسب التردد المختار
             if(currentView === 'dashboard') {
                 document.getElementById('attendance').value = 'present';
                 if(selectedTrackingFreq === 'monthly') {
@@ -1464,7 +1437,6 @@
             if(!silent) showToast('تم إلغاء التعديل', 'info');
         }
 
-        // حذف سجل عادي
         window.handleDelete = async (id) => {
             if(confirm('حذف التقييم نهائياً؟')) {
                 try {
@@ -1475,7 +1447,6 @@
             }
         };
 
-        // --- الإصلاح 2: دالة حذف الخط الأحمر والبيانات التابعة له ---
         window.handleDeleteSection = async (sepId) => {
             if (!confirm('هل أنت متأكد من حذف هذا الخط الأحمر وكل البيانات التابعة له؟')) return;
 
@@ -1483,7 +1454,6 @@
                 const docs = cachedSnapshot.docs;
                 let sepIndex = -1;
                 
-                // البحث عن الفاصل
                 for(let i=0; i<docs.length; i++) {
                     if(docs[i].id === sepId) {
                         sepIndex = i;
@@ -1496,18 +1466,14 @@
                 const batch = writeBatch(db);
                 let count = 0;
 
-                // إضافة الفاصل نفسه للحذف
                 batch.delete(docs[sepIndex].ref);
                 count++;
 
-                // البحث عن السجلات التي تليه حتى الفاصل التالي
                 for(let i = sepIndex + 1; i < docs.length; i++) {
                     const d = docs[i].data();
                     if(d.type === 'separator') {
-                        // وصلنا لفاصل جديد، نتوقف
                         break;
                     }
-                    // حذف السجلات العادية
                     batch.delete(docs[i].ref);
                     count++;
                 }
@@ -1516,10 +1482,6 @@
                 showToast(`تم حذف ${count} سجلات بنجاح`, 'success');
                 
                 if(editDocId && count > 0) {
-                    // إذا كان المعدل ضمن المحذوفين، ألغِ التعديل
-                    // (تحقق بسيط: هل الـ ID موجود ضمن النطاق المحذوف؟ 
-                    // بما أننا لا نملك الـ IDs المحذوفة في مصفوفة مباشرة هنا، 
-                    // الأفضل دائماً إلغاء التعديل عند حذف جماعي لتجنب الأخطاء)
                     handleCancelEdit(true);
                 }
 
@@ -1578,7 +1540,6 @@
             }
         };
 
-        // --- الجديد: تبديل وضع التصوير ---
         window.toggleScreenshotMode = () => {
             isScreenshotMode = !isScreenshotMode;
             const btn = document.getElementById('btn-screenshot');
@@ -1596,7 +1557,7 @@
             }
         };
 
-        // --- تم التعديل: دالة التقاط صورة لقسم محدد مع إصلاح الأعمدة والعنوان ---
+        // --- التعديل الرئيسي: دالة التقاط صورة مع التعديل للصفحات 168-200 ---
         window.captureSection = async (sepId) => {
             if (!isScreenshotMode) return;
 
@@ -1608,7 +1569,6 @@
                 return;
             }
 
-            // جمع الصفوف بعد هذا الفاصل وحتى الفاصل التالي
             let rowsToCapture = [];
             for (let i = separatorIndex + 1; i < allRows.length; i++) {
                 if (allRows[i].classList.contains('separator-row')) break;
@@ -1622,54 +1582,42 @@
 
             showToast('جاري التقاط صورة القسم...', 'info');
 
-            // إنشاء جدول مؤقت
             const tempTable = document.createElement('table');
             tempTable.style.width = '100%';
             tempTable.style.borderCollapse = 'collapse';
             tempTable.style.backgroundColor = '#ffffff';
             tempTable.style.tableLayout = 'auto';
 
-            // استنساخ الترويسة
             const thead = document.querySelector('#records-table thead').cloneNode(true);
             
-            // إزالة عمود الإجراءات من الترويسة (دائماً)
             const thActions = thead.querySelector('.col-actions');
             if(thActions) thActions.remove();
             
-            // التحقق من عمود الدرجات (هل هو مخفي في العرض الحالي؟)
             const thScore = thead.querySelector('.col-score');
             let shouldRemoveScoreCol = false;
             
-            // إذا كان عميد الدرجات مخفياً، نحذفه من العنوان ونمشي الحذف للجسم
             if (thScore && thScore.style.display === 'none') {
                 thScore.remove();
                 shouldRemoveScoreCol = true;
             }
 
-            // تلوين خلفية الترويسة للأبيض للصورة
             Array.from(thead.querySelectorAll('th')).forEach(th => {
                 th.style.backgroundColor = '#f3f4f6';
                 th.style.color = '#000';
                 th.style.borderBottom = '2px solid #000';
             });
 
-            // --- التعديل: حساب عدد الأعمدة المتبقية بعد التعديلات ---
             const remainingColumnsCount = thead.querySelectorAll('th').length;
 
-            // --- التعديل: إنشاء صف العنوان (اسم اليوم) وإضافته في بداية thead ---
             const sepRowData = allRows[separatorIndex];
             const sepLabel = sepRowData.querySelector('.separator-label-container span').innerText;
             
             const titleRow = document.createElement('tr');
             titleRow.innerHTML = `<td colspan="${remainingColumnsCount}" style="text-align:center; padding:15px; font-weight:bold; font-size:1.2rem; background:#f9fafb; border-bottom:2px solid #ef4444; color: #000;">سجل ${sepLabel}</td>`;
 
-            // إضافة صف العنوان كأول صف في الترويسة
             thead.insertBefore(titleRow, thead.firstChild);
-
-            // إضافة الترويسة إلى الجدول
             tempTable.appendChild(thead);
 
-            // إنشاء tbody للبيانات
             const tbody = document.createElement('tbody');
 
             rowsToCapture.forEach(row => {
@@ -1679,13 +1627,41 @@
                 const tdActions = clone.querySelector('.col-actions');
                 if(tdActions) tdActions.remove();
 
-                // إزالة عمود الدرجات إذا تم حذفه من الترويسة
+                // إزالة عمود الدرجات
                 if (shouldRemoveScoreCol) {
                     const tdScore = clone.querySelector('.col-score');
                     if(tdScore) tdScore.remove();
                 }
 
-                // تثبيت الألوان للصورة (وضع فاتح)
+                // --- التعديل الجوهري: دعم النطاق 168 إلى 200 ---
+                // العمود الثاني (index 1) هو عمود "المقدار"
+                const amountCell = clone.children[1];
+                
+                if (amountCell) {
+                    // Regex للمطابقة: من (168-200) إلى (نفس الرقم)
+                    // 16[8-9] -> 168, 169
+                    // 1[7-9]\d -> 170-199
+                    // 200 -> 200
+                    const rangeRegex = /من\s*(16[8-9]|1[7-9]\d|200)\s*إلى\s*\1/;
+
+                    if (rangeRegex.test(amountCell.innerText)) {
+                        
+                        // استخدام دالة الاستبدال لحساب الرقم التالي
+                        const modifiedHTML = amountCell.innerHTML.replace(rangeRegex, (match, p1) => {
+                            const nextNum = parseInt(p1) + 1;
+                            return `من ${p1} إلى ${nextNum}`;
+                        });
+                        
+                        amountCell.innerHTML = modifiedHTML;
+                        
+                        // تغيير المجموع في الشارة إلى 2
+                        const badge = amountCell.querySelector('.total-badge');
+                        if (badge) {
+                            badge.innerText = '(2)'; 
+                        }
+                    }
+                }
+
                 Array.from(clone.children).forEach(td => {
                     td.style.backgroundColor = '#ffffff';
                     td.style.color = '#000000';
@@ -1696,7 +1672,6 @@
             });
             tempTable.appendChild(tbody);
 
-            // إنشاء حاوية للتصوير
             const container = document.createElement('div');
             container.style.position = 'fixed';
             container.style.left = '-9999px';
@@ -1725,7 +1700,6 @@
                 
                 showToast('تم حفظ الصورة بنجاح', 'success');
                 
-                // إغلاق الوضع بعد النجاح
                 toggleScreenshotMode();
 
             } catch (error) {
@@ -1738,7 +1712,6 @@
             }
         }
 
-        // --- دالة رسم الجدول (بدون زر الإعجاب) ---
         function renderTable(snap, targetView) {
             const body = document.getElementById('records-body');
             const empty = document.getElementById('empty-msg');
@@ -1759,7 +1732,6 @@
             
             let skipMode = false;
             
-            // حساب الأعمدة الظاهرة حالياً لضبط colspan الفاصل
             let colSpanCount =5;
             if (targetView === 'reciters' || targetView === 'stages') colSpanCount++;
             if (isAdmin) colSpanCount++;
@@ -1790,7 +1762,6 @@
                              const sepId = docSnap.id;
                              const isCollapsed = !!collapsedSeparators[sepId];
                              
-                             // --- الحل الجذري: التحقق من وجود فاصل تالي ---
                              let hasNextSeparator = false;
                              if (isCollapsed) {
                                  for (let j = i + 1; j < docs.length; j++) {
@@ -1811,7 +1782,6 @@
                                  }
                              }
 
-                             // --- الإصلاح 2: زر الحذف الجماعي ---
                              const deleteBtnHTML = isAdmin 
                                 ? `<button class="separator-delete-btn" onclick="handleDeleteSection('${docSnap.id}')" title="حذف الخط والبيانات">x</button>`
                                 : '';
@@ -1823,9 +1793,8 @@
 
                              const tr = document.createElement('tr');
                              tr.className = 'separator-row';
-                             tr.setAttribute('data-id', sepId); // مهم للبحث عنه
+                             tr.setAttribute('data-id', sepId);
                              
-                             // إضافة النقطة الخاصة بالتصوير
                              const dotHTML = `
                                 <div class="screenshot-dot-container">
                                     <div class="screenshot-dot" onclick="captureSection('${sepId}')" title="تصوير هذا القسم">
@@ -1849,7 +1818,6 @@
                             `;
                              fragment.appendChild(tr);
 
-                             // --- التعديل: تفعيل skipMode فقط إذا كان مطوياً ووجود فاصل تالي ---
                              if (isCollapsed && hasNextSeparator) {
                                  skipMode = true;
                              }
@@ -1910,7 +1878,6 @@
                         
                         const t = docDate ? new Intl.DateTimeFormat('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' }).format(docDate) : '';
                         
-                        // التعديل الجديد لإضافة خيار "متوسط"
                         if (d.zxc === 'excellent') {
                             badgeClass = 'badge-excellent';
                             badgeText = 'ممتاز';
