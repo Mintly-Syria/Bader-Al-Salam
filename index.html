@@ -872,8 +872,7 @@
             navigateTo('dashboard', title);
         }
 
-        // دالة حساب المجموع (تظهر طبيعية 168-168 = 1)
-        // التعديل: تطبيق القاعدة للصفحات 168 إلى 200
+        // --- تم التعديل: دالة حساب المجموع (تم حذف الاستثناء الخاص بـ 168-200) ---
         window.calculateTotal = () => {
             const fromVal = document.getElementById('amount-from').value;
             const toVal = document.getElementById('amount-to').value;
@@ -887,12 +886,8 @@
             const to = parseFloat(toVal) || 0;
             let total = 0;
 
-            // التحقق مما إذا كانت الصفحة داخل النطاق 168 - 200
-            const isSpecialRange = (from >= 168 && from <= 200) && (to >= 168 && to <= 200);
-
-            if (isSpecialRange && from === to) {
-                total = 1; // المجموع يظهر 1 في الشاشة للصفحات 168-200
-            } else if (to >= from) { 
+            // المعادلة الاعتيادية لجميع الصفحات
+            if (to >= from) { 
                 total = (to - from) + 1; 
             }
             
@@ -1251,7 +1246,7 @@
             btn.innerHTML = old;
         };
 
-        // دالة حفظ المتابعة (الحفظ في قاعدة البيانات يكون 168-168)
+        // دالة حفظ المتابعة
         window.handleSubmit = async (e) => {
             e.preventDefault();
             
@@ -1279,9 +1274,6 @@
                     const from = document.getElementById('amount-from').value;
                     const to = document.getElementById('amount-to').value;
                     const total = document.getElementById('amount-total').value;
-                    
-                    // ملاحظة: نقوم بحفظ القيم كما هي من المدخلات
-                    // التعديل سيحدث فقط وقت التصوير، وليس وقت الحفظ
                     
                     if (from && to) {
                         asdVal = parseInt(total) || 0;
@@ -1557,7 +1549,7 @@
             }
         };
 
-        // --- التعديل الرئيسي: دالة التقاط صورة مع التعديل للصفحات 168-200 ---
+        // --- التعديل: دالة التقاط صورة (تم حذف التعديل الخاص للصفحات 168-200) ---
         window.captureSection = async (sepId) => {
             if (!isScreenshotMode) return;
 
@@ -1633,34 +1625,8 @@
                     if(tdScore) tdScore.remove();
                 }
 
-                // --- التعديل الجوهري: دعم النطاق 168 إلى 200 ---
-                // العمود الثاني (index 1) هو عمود "المقدار"
-                const amountCell = clone.children[1];
-                
-                if (amountCell) {
-                    // Regex للمطابقة: من (168-200) إلى (نفس الرقم)
-                    // 16[8-9] -> 168, 169
-                    // 1[7-9]\d -> 170-199
-                    // 200 -> 200
-                    const rangeRegex = /من\s*(16[8-9]|1[7-9]\d|200)\s*إلى\s*\1/;
-
-                    if (rangeRegex.test(amountCell.innerText)) {
-                        
-                        // استخدام دالة الاستبدال لحساب الرقم التالي
-                        const modifiedHTML = amountCell.innerHTML.replace(rangeRegex, (match, p1) => {
-                            const nextNum = parseInt(p1) + 1;
-                            return `من ${p1} إلى ${nextNum}`;
-                        });
-                        
-                        amountCell.innerHTML = modifiedHTML;
-                        
-                        // تغيير المجموع في الشارة إلى 2
-                        const badge = amountCell.querySelector('.total-badge');
-                        if (badge) {
-                            badge.innerText = '(2)'; 
-                        }
-                    }
-                }
+                // --- تم الحذف: كود تعديل النطاق 168 إلى 200 ---
+                // الآن سيتم أخذ البيانات كما هي دون أي تعديل في الأرقام
 
                 Array.from(clone.children).forEach(td => {
                     td.style.backgroundColor = '#ffffff';
