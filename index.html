@@ -896,7 +896,7 @@
 
         // دالة وضع خط الفصل (تم التعديل لإضافة سجل فارغ)
         window.addSeparatorLine = async () => {
-            if(!confirm('بدك تحط خط فصل احمر يا شيخ 😎 ولا لا ❌')) return;
+            if(!confirm('هل تريد وضع الخط ')) return;
             
             try {
                 const now = new Date();
@@ -955,7 +955,7 @@
 
                 await addDoc(collection(db, "daily_records"), studentData);
 
-                showToast('حطيت خط احمر ومشي الحال😁', 'success');
+                showToast('تم وضع الخط', 'success');
             } catch(err) {
                 console.error(err);
                 showToast('في خطا لان النت ضعيف ☢', 'error');
@@ -1145,7 +1145,7 @@
             const level = document.getElementById('reciter-level').value;
             if(!level) {
                 document.getElementById('reciter-level').focus();
-                showToast('شيخ لاتنسى التقييم 😁', 'warning');
+                showToast('لاتسى التقييم', 'warning');
                 return;
             }
 
@@ -1208,7 +1208,7 @@
             const level = document.getElementById('stages-level').value;
             if(!level) {
                 document.getElementById('stages-level').focus();
-                showToast('شيخ لاتنسى التقييم 😁', 'warning');
+                showToast('لاتنسى الملاحظات', 'warning');
                 return;
             }
 
@@ -1253,7 +1253,7 @@
             const level = document.getElementById('level').value;
             if(!level) {
                 document.getElementById('level').focus();
-                showToast('شيخ لاتنسى التقييم 😁', 'warning');
+                showToast('لاتنسى التقييم', 'warning');
                 return;
             }
 
@@ -1541,7 +1541,7 @@
                 btn.classList.add('active');
                 btn.innerHTML = '<i class="fas fa-times-circle"></i> <span>إلغاء</span>';
                 body.classList.add('screenshot-mode');
-                showToast('شيخ اضغط على زر الكاميرا على الخط الاحمر', 'info');
+                showToast('انقر زر الكاميرا', 'info');
             } else {
                 btn.classList.remove('active');
                 btn.innerHTML = '<i class="fas fa-camera"></i> <span>صورة</span>';
@@ -1572,7 +1572,7 @@
                 return;
             }
 
-            showToast('استنا شوي يا سيخ', 'info');
+            showToast('تم الالتقاط', 'info');
 
             const tempTable = document.createElement('table');
             tempTable.style.width = '100%';
@@ -1664,7 +1664,7 @@
                 link.click();
                 document.body.removeChild(link);
                 
-                showToast('تم كل شيء بنجاح يا شيخ', 'success');
+                showToast('تم', 'success');
                 
                 toggleScreenshotMode();
 
